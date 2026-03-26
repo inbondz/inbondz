@@ -3,14 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Inbondz | Theological Guide</title>
+    
+    <title>Inbondz | The Developer Network</title>
+    
+    <link rel="icon" type="image/png" href="/favicon.png?v=2">
+    <link rel="apple-touch-icon" href="/favicon.png?v=2">
+    <meta name="theme-color" content="#9ea3a3">
+
     <link href="https://fonts.googleapis.com/css2?family=Carter+One&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root { 
             --bg-base: #ffffff; --bg-panel: #f8f9fa; --bg-hover: #e8eaed; 
             --text-primary: #202124; --text-secondary: #5f6368; 
-            --accent-cyan: #00E5FF; --border-dim: #dfe1e5;
-            --brand-color: #9ea3a3; /* LOCKED COLOR */
+            --border-dim: #dfe1e5; --brand-color: #9ea3a3; 
             font-family: 'Inter', sans-serif; 
         }
         @media (prefers-color-scheme: dark) {
@@ -21,354 +26,300 @@
             }
         }
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html, body { background-color: var(--bg-base); color: var(--text-primary); height: 100dvh; width: 100vw; overflow: hidden; display: flex; flex-direction: column; }
+        body { background-color: var(--bg-base); color: var(--text-primary); min-height: 100dvh; display: flex; flex-direction: column; overflow-x: hidden; }
 
-        .fullscreen-gate { position: fixed; inset: 0; z-index: 10000; display: flex; justify-content: center; align-items: center; background: var(--bg-base); padding: 24px; }
-        .panel { background: var(--bg-panel); border: 1px solid var(--border-dim); border-radius: 24px; padding: 40px 30px; width: 100%; max-width: 400px; text-align: center; }
-        .btn-main { width: 100%; padding: 16px; background: var(--text-primary); color: var(--bg-base); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 24px; font-size: 1.1rem; }
-        .age-btns { display: flex; gap: 12px; margin-top: 16px; }
-        .age-btn { flex: 1; padding: 12px; background: transparent; border: 2px solid var(--border-dim); color: var(--text-primary); border-radius: 8px; cursor: pointer; font-weight: 600; }
-        .age-btn.selected { border-color: var(--brand-color); background: rgba(158, 163, 163, 0.1); }
-        .input-field { width: 100%; padding: 14px; margin-top: 16px; background: var(--bg-base); border: 1px solid var(--border-dim); color: var(--text-primary); border-radius: 8px; font-size: 1rem; outline: none; }
-
-        #app-root { flex: 1; display: flex; overflow: hidden; position: relative; width: 100%; display: none; }
-        #sidebar { width: 300px; background: var(--bg-panel); border-right: 1px solid var(--border-dim); display: flex; flex-direction: column; transition: transform 0.3s; z-index: 2000; }
-        .sidebar-header { padding: 20px; border-bottom: 1px solid var(--border-dim); }
-        .new-chat-btn { width: 100%; padding: 14px; background: transparent; border: 2px solid var(--brand-color); color: var(--brand-color); border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 1rem; }
-        .chat-list { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
-        .chat-item { padding: 14px; border-radius: 12px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; color: var(--text-secondary); }
-        .chat-item:hover, .chat-item.active { background: var(--bg-hover); color: var(--text-primary); border-left: 3px solid var(--brand-color); }
-        .chat-actions { display: flex; gap: 8px; }
-        .chat-actions span { cursor: pointer; }
-
-        #main-chat { flex: 1; display: flex; flex-direction: column; position: relative; width: 100%; }
-        header { display: flex; justify-content: space-between; align-items: center; padding: 0 20px; min-height: 64px; border-bottom: 1px solid var(--border-dim); background: var(--bg-base); z-index: 1000; }
-        .menu-toggle { width: 44px; height: 44px; background: transparent; border: none; color: var(--text-primary); font-size: 1.8rem; cursor: pointer; display: none; align-items: center; }
-        .brand-logo { font-family: 'Carter One', cursive; font-size: 1.6rem; color: var(--brand-color); }
-        .nav-avatar { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--border-dim); cursor: pointer; object-fit: cover; }
+        /* HEADER */
+        header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; position: sticky; top: 0; background: var(--bg-base); z-index: 1000; border-bottom: 1px solid var(--border-dim); }
+        .brand-logo { font-family: 'Carter One', cursive; font-size: 1.6rem; color: var(--brand-color); cursor: pointer; text-decoration: none; }
+        .nav-right { display: flex; align-items: center; gap: 12px; }
         
-        .dropdown { display: none; position: absolute; top: 60px; right: 20px; background: var(--bg-panel); border: 1px solid var(--border-dim); border-radius: 12px; overflow: hidden; width: 280px; z-index: 3000; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .icon-btn { background: transparent; border: none; cursor: pointer; color: var(--text-primary); display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; transition: 0.2s; }
+        .icon-btn:hover { background: var(--bg-hover); }
+        .icon-btn svg { width: 22px; height: 22px; fill: currentColor; }
+        
+        .nav-avatar { width: 36px; height: 36px; border-radius: 50%; cursor: pointer; object-fit: cover; display: none; border: 2px solid transparent; }
+        .nav-avatar:hover { border-color: var(--brand-color); }
+        
+        .btn-ghost { background: transparent; color: var(--text-primary); border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 0.95rem; }
+        .btn-solid { background: var(--text-primary); color: var(--bg-base); border: none; padding: 8px 18px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 0.95rem; }
+
+        /* DROPDOWN */
+        .dropdown { display: none; position: absolute; top: 60px; right: 24px; background: var(--bg-panel); border: 1px solid var(--border-dim); border-radius: 12px; overflow: hidden; width: 220px; z-index: 3000; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
         .dropdown.show { display: block; }
-        .profile-header { padding: 16px; border-bottom: 1px solid var(--border-dim); display: flex; align-items: center; gap: 12px; }
         .drop-btn { width: 100%; padding: 14px 16px; text-align: left; background: transparent; border: none; color: var(--text-primary); font-size: 0.95rem; cursor: pointer; border-bottom: 1px solid var(--border-dim); font-weight: 500; }
         .drop-btn:hover { background: var(--bg-hover); }
-        .drop-btn.danger { color: #ff4444; border-bottom: none; }
 
-        #dashboard-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 4000; justify-content: center; align-items: center; padding: 20px; }
-        .dash-card { background: var(--bg-panel); width: 100%; max-width: 350px; border-radius: 20px; padding: 24px; border: 1px solid var(--border-dim); }
-        .limit-row { display: flex; justify-content: space-between; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border-dim); }
-        .limit-row span { color: var(--text-secondary); font-weight: 500; }
-        .limit-row strong { color: var(--text-primary); }
+        /* SEARCH OVERLAY */
+        #search-overlay { display: none; position: fixed; inset: 0; background: var(--bg-base); z-index: 2000; flex-direction: column; }
+        .search-header { padding: 16px 24px; border-bottom: 1px solid var(--border-dim); display: flex; gap: 12px; align-items: center; }
+        .search-input { flex: 1; background: var(--bg-panel); border: none; padding: 12px 16px; border-radius: 20px; color: var(--text-primary); font-size: 1rem; outline: none; }
+        #search-results { flex: 1; overflow-y: auto; padding: 16px 24px; display: flex; flex-direction: column; gap: 12px; }
+        .search-user-card { display: flex; align-items: center; gap: 16px; padding: 12px; border-radius: 12px; cursor: pointer; text-decoration: none; color: var(--text-primary); transition: 0.2s; }
+        .search-user-card:hover { background: var(--bg-hover); }
+        .search-user-card img { width: 48px; height: 48px; border-radius: 50%; }
 
-        #chat-history { flex: 1; overflow-y: auto; padding: 24px 20px; display: flex; flex-direction: column; gap: 24px; scroll-behavior: smooth; }
-        .msg-row { display: flex; width: 100%; flex-direction: column; }
-        .msg-row.user { align-items: flex-end; }
-        .msg-row.ai { align-items: flex-start; }
-        .bubble { max-width: 85%; padding: 16px 20px; border-radius: 20px; font-size: 1.05rem; line-height: 1.6; white-space: pre-wrap; position: relative; }
-        .msg-row.user .bubble { background: var(--bg-hover); border-bottom-right-radius: 4px; }
-        .msg-row.ai .bubble { background: transparent; border: 1px solid var(--border-dim); border-bottom-left-radius: 4px; }
+        /* PROFILE VIEW */
+        #view-profile { display: none; flex-direction: column; align-items: center; padding: 40px 20px; max-width: 600px; margin: 0 auto; width: 100%; }
+        .profile-avatar { width: 100px; height: 100px; border-radius: 50%; margin-bottom: 16px; object-fit: cover; border: 3px solid var(--bg-panel); }
+        .profile-name { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; text-align: center; }
+        .profile-username { color: var(--text-secondary); margin-bottom: 16px; font-size: 1rem; }
+        .profile-bio { text-align: center; line-height: 1.5; margin-bottom: 32px; font-size: 1.05rem; }
         
-        /* Streaming Fading Effect */
-        .word-fade { opacity: 0; animation: fadeIn 0.4s forwards; display: inline-block; }
-        @keyframes fadeIn { to { opacity: 1; } }
+        .link-btn { display: flex; justify-content: center; align-items: center; width: 100%; padding: 18px; background: var(--bg-panel); border: 1px solid var(--border-dim); border-radius: 16px; color: var(--text-primary); text-decoration: none; font-weight: 600; margin-bottom: 12px; transition: 0.2s; }
+        .link-btn:hover { background: var(--bg-hover); transform: translateY(-2px); }
+        .edit-profile-btn { margin-top: 24px; padding: 12px 24px; background: transparent; border: 2px solid var(--text-primary); color: var(--text-primary); border-radius: 24px; font-weight: 600; cursor: pointer; display: none; }
 
-        .input-container { background: var(--bg-base); padding: 12px 16px 24px 16px; border-top: 1px solid var(--border-dim); z-index: 1500; }
-        .input-box { display: flex; gap: 12px; background: var(--bg-panel); border: 1px solid var(--border-dim); padding: 8px 8px 8px 16px; border-radius: 24px; align-items: flex-end; max-width: 800px; margin: 0 auto; }
-        .chat-input { flex: 1; background: transparent; border: none; color: var(--text-primary); outline: none; resize: none; font-size: 1.05rem; max-height: 150px; padding: 12px 0; }
-        .send-btn { background: var(--text-primary); color: var(--bg-base); border: none; min-width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; margin-bottom: 2px; }
-
-        @media (max-width: 768px) {
-            .menu-toggle { display: flex; }
-            #sidebar { position: absolute; height: 100%; transform: translateX(-100%); width: 85%; max-width: 320px; box-shadow: 10px 0 30px rgba(0,0,0,0.5); }
-            #sidebar.open { transform: translateX(0); }
-        }
+        /* MODALS */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(4px); }
+        .modal-box { background: var(--bg-base); width: 100%; max-width: 450px; border-radius: 24px; padding: 32px; border: 1px solid var(--border-dim); display: flex; flex-direction: column; gap: 16px; }
+        .modal-title { font-size: 1.5rem; font-weight: 700; }
+        .modal-input { width: 100%; padding: 14px; background: var(--bg-panel); border: 1px solid var(--border-dim); border-radius: 12px; color: var(--text-primary); font-size: 1rem; outline: none; }
+        textarea.modal-input { resize: vertical; min-height: 100px; }
+        .modal-btn-row { display: flex; gap: 12px; margin-top: 16px; }
+        .btn-primary { flex: 1; padding: 14px; background: var(--text-primary); color: var(--bg-base); border: none; border-radius: 12px; font-weight: 600; cursor: pointer; }
+        .btn-secondary { flex: 1; padding: 14px; background: transparent; color: var(--text-primary); border: 1px solid var(--border-dim); border-radius: 12px; font-weight: 600; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div id="auth-gate" class="fullscreen-gate">
-        <div class="panel">
-            <h1 class="brand-logo" style="font-size: 3.5rem; margin-bottom: 8px;">Inbondz</h1>
-            <p style="color: var(--text-secondary); margin-bottom: 32px;">Exclusive Theological Guide</p>
-            <button class="btn-main" onclick="AuthSystem.triggerAuth()">Login via GitHub</button>
-        </div>
-    </div>
-
-    <div id="register-gate" class="fullscreen-gate" style="display:none;">
-        <div class="panel">
-            <h2 style="margin-bottom: 12px;">Complete Profile</h2>
-            <input type="text" id="reg-name" class="input-field" placeholder="Display Name">
-            <div class="age-btns">
-                <button class="age-btn" id="btn-18minus" onclick="AuthSystem.selectAge('18-')">18-</button>
-                <button class="age-btn" id="btn-18plus" onclick="AuthSystem.selectAge('18+')">18+</button>
+    <header>
+        <a href="/" class="brand-logo" onclick="Router.navigate('/'); return false;">Inbondz</a>
+        <div class="nav-right">
+            <button class="icon-btn" onclick="UI.openSearch()">
+                <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            </button>
+            <div id="auth-buttons" style="display: flex; gap: 8px;">
+                <button class="btn-ghost" onclick="AuthSystem.triggerAuth()">Log In</button>
+                <button class="btn-solid" onclick="AuthSystem.triggerAuth()">Sign Up</button>
             </div>
-            <button class="btn-main" onclick="AuthSystem.submitRegister()">Enter Inbondz</button>
-        </div>
-    </div>
-
-    <div id="dashboard-modal" onclick="if(event.target===this) this.style.display='none'">
-        <div class="dash-card">
-            <h3 style="margin-bottom: 20px; color:var(--brand-color); font-family: 'Carter One', cursive;">Daily Limits</h3>
-            <div class="limit-row"><span>AI Queries Left:</span> <strong id="dash-ai">15</strong></div>
-            <div class="limit-row"><span>Reads Left:</span> <strong id="dash-reads">5000</strong></div>
-            <div class="limit-row"><span>Writes Left:</span> <strong id="dash-writes">150</strong></div>
-            <button class="btn-main" style="padding: 10px; margin-top: 10px;" onclick="document.getElementById('dashboard-modal').style.display='none'">Close</button>
-        </div>
-    </div>
-
-    <div id="app-root">
-        <aside id="sidebar">
-            <div class="sidebar-header"><button class="new-chat-btn" onclick="ChatUI.startNewChat()">+ New Chat</button></div>
-            <div class="chat-list" id="sidebar-list"></div>
-        </aside>
-
-        <main id="main-chat">
-            <header>
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <button class="menu-toggle" onclick="UI.toggleSidebar()">☰</button>
-                    <div class="brand-logo">Inbondz</div>
-                </div>
-                <div style="position: relative;">
-                    <img src="" class="nav-avatar" id="nav-avatar" onclick="UI.toggleDropdown()">
-                    <div class="dropdown" id="profile-dropdown">
-                        <div class="profile-header">
-                            <img src="" id="drop-avatar" style="width:40px; border-radius:50%; object-fit: cover;">
-                            <div style="overflow: hidden;">
-                                <div id="drop-name" style="font-weight:700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Name</div>
-                                <div id="drop-user" style="font-size:0.8rem; color:var(--text-secondary);">@user</div>
-                            </div>
-                        </div>
-                        <button class="drop-btn">Privacy Policy</button>
-                        <button class="drop-btn">Terms</button>
-                        <button class="drop-btn" onclick="UI.showDashboard()">Remaining Credits Today</button>
-                        <button class="drop-btn" onclick="AuthSystem.logout()">Log Out</button>
-                        <button class="drop-btn danger" onclick="AuthSystem.deleteAccount()">Account</button>
-                    </div>
-                </div>
-            </header>
-
-            <div id="chat-history"></div>
-
-            <div class="input-container">
-                <div class="input-box">
-                    <textarea class="chat-input" id="chat-input" rows="1" placeholder="Consult the guide..." oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"></textarea>
-                    <button class="send-btn" id="send-btn" onclick="ChatEngine.sendMessage()">↑</button>
+            <div style="position: relative;">
+                <img src="" id="nav-avatar" class="nav-avatar" onclick="UI.toggleDropdown()">
+                <div class="dropdown" id="profile-dropdown">
+                    <button class="drop-btn" onclick="Router.navigate(`/${AppState.user.login}`); UI.toggleDropdown();">My Profile</button>
+                    <button class="drop-btn" onclick="AuthSystem.logout()">Log Out</button>
+                    <button class="drop-btn" style="color:#ff4444; border-bottom:none;" onclick="UI.openDeleteModal()">Delete Account</button>
                 </div>
             </div>
-        </main>
+        </div>
+    </header>
+
+    <div id="search-overlay">
+        <div class="search-header">
+            <button class="icon-btn" onclick="UI.closeSearch()">
+                <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+            </button>
+            <input type="text" id="search-input" class="search-input" placeholder="Search developers on GitHub..." autocomplete="off">
+        </div>
+        <div id="search-results"></div>
+    </div>
+
+    <main id="view-home" style="display:flex; flex-direction:column; align-items:center; justify-content:center; flex:1; padding:20px; text-align:center;">
+        <h1 class="brand-logo" style="font-size: 4rem; margin-bottom: 16px;">Inbondz</h1>
+        <p style="color: var(--text-secondary); font-size: 1.1rem; max-width: 400px; margin-bottom: 32px;">Claim your developer identity. Build your unified profile.</p>
+        <div id="home-cta-buttons" style="display: flex; gap: 16px; justify-content: center; width: 100%;">
+            <button class="btn-solid" style="padding: 14px 28px; font-size: 1.1rem;" onclick="AuthSystem.triggerAuth()">Sign Up</button>
+            <button class="btn-ghost" style="padding: 14px 28px; font-size: 1.1rem; border: 2px solid var(--border-dim);" onclick="AuthSystem.triggerAuth()">Log In</button>
+        </div>
+    </main>
+
+    <div id="view-profile">
+        <img src="" id="prof-avatar" class="profile-avatar">
+        <div id="prof-name" class="profile-name"></div>
+        <div id="prof-username" class="profile-username"></div>
+        <div id="prof-bio" class="profile-bio"></div>
+        <div id="prof-links" style="width: 100%; display: flex; flex-direction: column;"></div>
+        <button id="edit-profile-btn" class="edit-profile-btn" onclick="UI.openEditModal()">Edit Profile</button>
+    </div>
+
+    <div id="edit-modal" class="modal-overlay">
+        <div class="modal-box">
+            <h2 class="modal-title">Edit GitHub Info</h2>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">This securely updates your native GitHub profile.</p>
+            <input type="text" id="edit-name" class="modal-input" placeholder="Name">
+            <textarea id="edit-bio" class="modal-input" placeholder="Bio"></textarea>
+            <input type="text" id="edit-blog" class="modal-input" placeholder="Website / Portfolio Link">
+            <div class="modal-btn-row">
+                <button class="btn-secondary" onclick="UI.closeEditModal()">Cancel</button>
+                <button class="btn-primary" onclick="AuthSystem.saveProfile()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="delete-modal" class="modal-overlay" style="z-index: 3100;">
+        <div class="modal-box" style="border: 1px solid #ff4444;">
+            <h2 class="modal-title" style="color: #ff4444;">Leave Inbondz?</h2>
+            <p style="color: var(--text-secondary); line-height: 1.5;">This removes you from the Inbondz registry. Your GitHub account and repositories remain completely safe.</p>
+            <input type="text" id="delete-confirm-input" class="modal-input" placeholder="Type DELETE to confirm">
+            <div class="modal-btn-row">
+                <button class="btn-secondary" onclick="UI.closeDeleteModal()">Cancel</button>
+                <button class="btn-primary" style="background: #ff4444;" onclick="AuthSystem.confirmDelete()">Permanently Delete</button>
+            </div>
+        </div>
     </div>
 
     <script>
         const API_BASE = "/api"; 
         const CLIENT_ID = "Ov23liJJsDe8t4Amjn8z"; 
-        let AppState = { token: null, user: null, profile: null, currentChatId: null, ageSelection: null };
+        let AppState = { token: localStorage.getItem('inb_token'), user: null, viewData: null };
+
+        const Router = {
+            navigate: (path) => {
+                window.history.pushState({}, "", path);
+                Router.resolve();
+            },
+            resolve: async () => {
+                const path = window.location.pathname;
+                document.getElementById('view-home').style.display = 'none';
+                document.getElementById('view-profile').style.display = 'none';
+
+                if (path === '/' || path === '/index.html') {
+                    document.getElementById('view-home').style.display = 'flex';
+                } else {
+                    const username = path.substring(1).replace(/\/$/, "");
+                    await loadProfileView(username);
+                }
+            }
+        };
+
+        const loadProfileView = async (username) => {
+            document.getElementById('view-profile').style.display = 'flex';
+            document.getElementById('prof-name').innerText = "Loading...";
+            document.getElementById('prof-bio').innerText = "";
+            document.getElementById('prof-links').innerHTML = "";
+            document.getElementById('edit-profile-btn').style.display = 'none';
+
+            try {
+                // Fetch directly from GitHub ($0 Server Cost)
+                const res = await fetch(`https://api.github.com/users/${username}`);
+                if (!res.ok) throw new Error();
+                const data = await res.json();
+                
+                AppState.viewData = data;
+                document.getElementById('prof-avatar').src = data.avatar_url;
+                document.getElementById('prof-name').innerText = data.name || data.login;
+                document.getElementById('prof-username').innerText = `@${data.login}`;
+                document.getElementById('prof-bio').innerText = data.bio || "";
+                
+                let linksHTML = '';
+                if (data.blog) {
+                    const blogUrl = data.blog.startsWith('http') ? data.blog : `https://${data.blog}`;
+                    linksHTML += `<a href="${blogUrl}" target="_blank" class="link-btn">Website / Portfolio</a>`;
+                }
+
+                // Fetch Native GitHub Social Links
+                const socialRes = await fetch(`https://api.github.com/users/${username}/social_accounts`);
+                if(socialRes.ok) {
+                    const socials = await socialRes.json();
+                    socials.forEach(s => {
+                        linksHTML += `<a href="${s.url}" target="_blank" class="link-btn">${s.provider}</a>`;
+                    });
+                }
+                
+                document.getElementById('prof-links').innerHTML = linksHTML;
+
+                if (AppState.user && AppState.user.login.toLowerCase() === username.toLowerCase()) {
+                    document.getElementById('edit-profile-btn').style.display = 'block';
+                }
+            } catch(e) {
+                document.getElementById('prof-name').innerText = "User not found on GitHub.";
+            }
+        };
 
         const AuthSystem = (() => {
             const init = async () => {
-                const token = localStorage.getItem('inb_token');
                 const code = new URLSearchParams(window.location.search).get('code');
-
                 if (code) {
+                    // This hits the Cloudflare Worker to exchange the code and register in D1
                     const res = await fetch(`${API_BASE}/auth`, { method: 'POST', body: JSON.stringify({code}) });
                     const data = await res.json();
-                    if(data.error) { alert(data.error); window.location.replace('/'); return; }
-                    
-                    localStorage.setItem('inb_token', data.access_token);
-                    
-                    if(data.needs_registration) {
-                        document.getElementById('auth-gate').style.display = 'none';
-                        document.getElementById('register-gate').style.display = 'flex';
-                    } else {
-                        window.location.replace('/');
+                    if(!data.error) {
+                        localStorage.setItem('inb_token', data.access_token);
+                        window.history.replaceState({}, document.title, "/");
+                        AppState.token = data.access_token;
                     }
-                    return;
                 }
 
-                if (token) {
-                    AppState.token = token;
-                    const res = await fetch(`${API_BASE}/me`, { headers: { 'Authorization': `Bearer ${token}` }});
+                if (AppState.token) {
+                    // Verify directly with GitHub
+                    const res = await fetch("https://api.github.com/user", { headers: { "Authorization": `Bearer ${AppState.token}` } });
                     if(res.ok) {
-                        AppState.profile = await res.json();
-                        setupUI();
-                    } else { logout(); }
+                        AppState.user = await res.json();
+                        document.getElementById('auth-buttons').style.display = 'none';
+                        document.getElementById('home-cta-buttons').style.display = 'none';
+                        const avatar = document.getElementById('nav-avatar');
+                        avatar.src = AppState.user.avatar_url;
+                        avatar.style.display = 'block';
+                    } else { localStorage.removeItem('inb_token'); }
                 }
+                Router.resolve();
             };
 
-            const selectAge = (age) => {
-                AppState.ageSelection = age;
-                document.getElementById('btn-18minus').classList.remove('selected');
-                document.getElementById('btn-18plus').classList.remove('selected');
-                document.getElementById(age === '18-' ? 'btn-18minus' : 'btn-18plus').classList.add('selected');
-            };
+            const triggerAuth = () => { window.location.href = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=read:user,user:email`; };
+            const logout = () => { localStorage.clear(); window.location.href = '/'; };
 
-            const submitRegister = async () => {
-                const name = document.getElementById('reg-name').value.trim();
-                if(!name || !AppState.ageSelection) return alert("Complete all fields.");
+            const saveProfile = async () => {
+                const name = document.getElementById('edit-name').value;
+                const bio = document.getElementById('edit-bio').value;
+                const blog = document.getElementById('edit-blog').value;
                 
-                await fetch(`${API_BASE}/register`, { 
-                    method: 'POST', headers: { 'Authorization': `Bearer ${localStorage.getItem('inb_token')}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ display_name: name, age_group: AppState.ageSelection })
+                // Directly updates real GitHub profile via GitHub's API
+                await fetch("https://api.github.com/user", {
+                    method: 'PATCH',
+                    headers: { 'Authorization': `Bearer ${AppState.token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, bio, blog })
                 });
-                window.location.replace('/');
+                
+                UI.closeEditModal();
+                loadProfileView(AppState.user.login); 
             };
 
-            const triggerAuth = () => { window.location.href = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=read:user`; };
-            const logout = () => { localStorage.clear(); window.location.reload(); };
-            
-            const deleteAccount = async () => {
-                const conf = prompt("To permanently delete your data and credits, type DELETE");
-                if (conf === "DELETE") {
-                    await fetch(`${API_BASE}/delete`, { method: 'POST', headers: { 'Authorization': `Bearer ${AppState.token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'account', confirmText: "DELETE" }) });
+            const confirmDelete = async () => {
+                const input = document.getElementById('delete-confirm-input').value;
+                if(input === "DELETE") {
+                    // This hits the Cloudflare Worker to remove them from D1
+                    await fetch(`${API_BASE}/delete`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${AppState.token}` } });
                     logout();
-                }
+                } else { alert("Type DELETE to confirm"); }
             };
 
-            return { init, triggerAuth, logout, deleteAccount, selectAge, submitRegister };
+            return { init, triggerAuth, logout, saveProfile, confirmDelete };
         })();
-
-        const setupUI = () => {
-            document.getElementById('auth-gate').style.display = 'none';
-            document.getElementById('app-root').style.display = 'flex';
-            document.getElementById('nav-avatar').src = AppState.profile.avatar_url;
-            document.getElementById('drop-avatar').src = AppState.profile.avatar_url;
-            document.getElementById('drop-name').innerText = AppState.profile.display_name;
-            document.getElementById('drop-user').innerText = `@${AppState.profile.github_login} • ${AppState.profile.age_group}`;
-            ChatUI.startNewChat();
-            ChatUI.loadSidebar();
-        };
 
         const UI = {
-            toggleSidebar: () => document.getElementById('sidebar').classList.toggle('open'),
+            openSearch: () => { document.getElementById('search-overlay').style.display = 'flex'; document.getElementById('search-input').focus(); },
+            closeSearch: () => { document.getElementById('search-overlay').style.display = 'none'; },
             toggleDropdown: () => document.getElementById('profile-dropdown').classList.toggle('show'),
-            showDashboard: async () => {
-                const res = await fetch(`${API_BASE}/me`, { headers: { 'Authorization': `Bearer ${AppState.token}` }});
-                const p = await res.json();
-                document.getElementById('dash-ai').innerText = Math.max(0, 15 - p.ai_queries_today);
-                document.getElementById('dash-reads').innerText = Math.max(0, 5000 - p.reads_today);
-                document.getElementById('dash-writes').innerText = Math.max(0, 150 - p.writes_today);
-                document.getElementById('dashboard-modal').style.display = 'flex';
-                document.getElementById('profile-dropdown').classList.remove('show');
-            }
+            openEditModal: () => {
+                document.getElementById('edit-name').value = AppState.viewData.name || '';
+                document.getElementById('edit-bio').value = AppState.viewData.bio || '';
+                document.getElementById('edit-blog').value = AppState.viewData.blog || '';
+                document.getElementById('edit-modal').style.display = 'flex';
+            },
+            closeEditModal: () => document.getElementById('edit-modal').style.display = 'none',
+            openDeleteModal: () => { document.getElementById('delete-modal').style.display = 'flex'; document.getElementById('profile-dropdown').classList.remove('show'); },
+            closeDeleteModal: () => { document.getElementById('delete-modal').style.display = 'none'; document.getElementById('delete-confirm-input').value = ''; }
         };
 
-        const ChatUI = (() => {
-            const loadSidebar = async () => {
-                const res = await fetch(`${API_BASE}/chats`, { headers: { 'Authorization': `Bearer ${AppState.token}` }});
-                const chats = await res.json();
-                const list = document.getElementById('sidebar-list');
-                list.innerHTML = '';
-                chats.forEach(c => {
-                    const el = document.createElement('div');
-                    el.className = `chat-item ${c.id === AppState.currentChatId ? 'active' : ''}`;
-                    el.innerHTML = `
-                        <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" onclick="ChatUI.loadChat('${c.id}')">${c.is_pinned ? '📌 ' : ''}${c.title}</span>
-                        <div class="chat-actions">
-                            <span onclick="ChatEngine.pinChat('${c.id}', ${!c.is_pinned}, event)">${c.is_pinned ? '📍' : '📌'}</span>
-                            <span onclick="ChatEngine.deleteChat('${c.id}', event)">🗑</span>
-                        </div>`;
-                    list.appendChild(el);
-                });
-            };
+        // CLIENT-SIDE GITHUB SEARCH
+        document.getElementById('search-input').addEventListener('input', async (e) => {
+            const query = e.target.value.trim();
+            const resultsBox = document.getElementById('search-results');
+            if(query.length < 3) return resultsBox.innerHTML = '';
 
-            const startNewChat = () => {
-                AppState.currentChatId = null;
-                document.getElementById('chat-history').innerHTML = `<div style="text-align:center; color:var(--text-secondary); margin-top:40px;"><h2 style="color:var(--text-primary); margin-bottom:10px; font-family: 'Carter One', cursive;">Inbondz Active</h2><p>Ask a question about scripture, theology, or mythology.</p></div>`;
-                document.querySelectorAll('.chat-item').forEach(el => el.classList.remove('active'));
-                if(window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
-            };
-
-            const loadChat = async (id) => {
-                AppState.currentChatId = id;
-                if(window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
-                loadSidebar(); 
-
-                const res = await fetch(`${API_BASE}/chat/${id}`, { headers: { 'Authorization': `Bearer ${AppState.token}` }});
-                const msgs = await res.json();
-                
-                const box = document.getElementById('chat-history');
-                box.innerHTML = '';
-                msgs.forEach(m => appendMessage(m.role, m.content));
-                setTimeout(() => { box.scrollTop = box.scrollHeight; }, 50);
-            };
-
-            const appendMessage = (role, content, animate = false) => {
-                const box = document.getElementById('chat-history');
-                const row = document.createElement('div');
-                row.className = `msg-row ${role === 'user' ? 'user' : 'ai'}`;
-                
-                const bubble = document.createElement('div');
-                bubble.className = 'bubble';
-                row.appendChild(bubble);
-                box.appendChild(row);
-
-                if (animate && role === 'ai') {
-                    // SMOOTH TYPING/FADING ANIMATION
-                    const words = content.split(/(\s+)/); // Preserves spacing
-                    let i = 0;
-                    const interval = setInterval(() => {
-                        if(i < words.length) {
-                            if(words[i].trim() === '') { bubble.appendChild(document.createTextNode(words[i])); } 
-                            else {
-                                const span = document.createElement('span');
-                                span.className = 'word-fade';
-                                span.innerText = words[i];
-                                bubble.appendChild(span);
-                            }
-                            box.scrollTop = box.scrollHeight;
-                            i++;
-                        } else { clearInterval(interval); }
-                    }, 35);
-                } else {
-                    bubble.innerText = content; // Safely render past content
-                    box.scrollTop = box.scrollHeight;
-                }
-            };
-
-            return { startNewChat, loadSidebar, loadChat, appendMessage };
-        })();
-
-        const ChatEngine = {
-            sendMessage: async () => {
-                const input = document.getElementById('chat-input');
-                const text = input.value.trim();
-                if(!text) return;
-
-                input.value = ''; input.style.height = '';
-                if(document.querySelector('#chat-history h2')) document.getElementById('chat-history').innerHTML = '';
-                ChatUI.appendMessage('user', text);
-
-                const res = await fetch(`${API_BASE}/ask`, {
-                    method: 'POST', headers: { 'Authorization': `Bearer ${AppState.token}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chatId: AppState.currentChatId, prompt: text })
-                });
-                
+            try {
+                const res = await fetch(`https://api.github.com/search/users?q=${query}&per_page=10`);
                 const data = await res.json();
-                if(data.error) return alert(data.error);
-                
-                AppState.currentChatId = data.chatId;
-                ChatUI.appendMessage('assistant', data.reply, true); 
-                ChatUI.loadSidebar();
-            },
-            deleteChat: async (id, e) => {
-                e.stopPropagation();
-                if(!confirm("Erase this session?")) return;
-                await fetch(`${API_BASE}/delete`, { method: 'POST', headers: { 'Authorization': `Bearer ${AppState.token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'chat', targetId: id }) });
-                if(AppState.currentChatId === id) ChatUI.startNewChat();
-                ChatUI.loadSidebar();
-            },
-            pinChat: async (id, isPinned, e) => {
-                e.stopPropagation();
-                await fetch(`${API_BASE}/pin`, { method: 'POST', headers: { 'Authorization': `Bearer ${AppState.token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ chatId: id, isPinned }) });
-                ChatUI.loadSidebar();
-            }
-        };
-
-        // Submit on enter (Shift+Enter for new line)
-        document.getElementById('chat-input').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ChatEngine.sendMessage(); }
+                resultsBox.innerHTML = data.items.map(u => `
+                    <a href="/${u.login}" class="search-user-card" onclick="UI.closeSearch(); Router.navigate('/${u.login}'); return false;">
+                        <img src="${u.avatar_url}">
+                        <div style="font-weight: 600;">@${u.login}</div>
+                    </a>
+                `).join('');
+            } catch(e) {}
         });
 
-        document.onclick = e => { if (!e.target.matches('.nav-avatar')) document.getElementById('profile-dropdown').classList.remove('show'); };
+        window.onclick = e => { if (!e.target.matches('.nav-avatar')) document.getElementById('profile-dropdown').classList.remove('show'); };
+        window.addEventListener('popstate', Router.resolve);
         document.addEventListener('DOMContentLoaded', AuthSystem.init);
     </script>
 </body>

@@ -1,0 +1,22 @@
+:root { --bg: #0d1117; --card: #161b22; --text: #c9d1d9; --dim: #8b949e; --link: #58a6ff; --border: #30363d; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: sans-serif; margin: 0; display: flex; justify-content: center; overflow-x: hidden; }
+.search-layout { width: 100%; max-width: 700px; padding: 80px 20px; display: flex; flex-direction: column; align-items: center; }
+.brand-logo { font-size: 3.5rem; margin: 0; background: linear-gradient(to right, #58a6ff, #bc8cff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.brand-tagline { color: var(--dim); margin-bottom: 30px; }
+.input-group { width: 100%; position: relative; margin-bottom: 20px; }
+input { width: 100%; padding: 16px 25px; border-radius: 30px; border: 1px solid var(--border); background: var(--card); color: #fff; font-size: 1.1rem; outline: none; }
+input:focus { border-color: var(--link); }
+.scroll-area { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+.result-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 15px; text-decoration: none; display: flex; gap: 15px; }
+.result-card:hover { border-color: var(--link); }
+.favicon { width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0; background: #fff; }
+.meta h3 { color: var(--link); margin: 0 0 4px 0; font-size: 1.1rem; }
+.meta p { color: var(--dim); margin: 0; font-size: 0.9rem; line-height: 1.4; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.auth-wrapper { position: absolute; top: 20px; right: 20px; }
+.btn-login { background: #238636; color: white; padding: 8px 15px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.85rem; }
+.hidden { display: none !important; }
+.spinner { position: absolute; right: 20px; top: 18px; width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--link); border-radius: 50%; animation: s 1s linear infinite; }
+@keyframes s { to { transform: rotate(360deg); } }
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+.modal-body { background: var(--card); padding: 30px; border-radius: 15px; text-align: center; border: 1px solid #ff7b72; max-width: 400px; }
